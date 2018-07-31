@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    body {
+      /* background-color: #7C65C2; */
+      background: url('./img/yun.jpg');
+    }
+    /* 气球样式 */
+    .box {
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      font-size: 30px;
+      opacity: 0.7;
+      border-radius: 50px 50px 50px 10px;
+      box-shadow:-8px -8px 80px -8px #873940 inset;
+      transform: rotate(315deg);
+      /*transition: all .2s;*/
+      position: absolute;
+    }
+    /* 气球飘动 */
+    .box.animation {
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      font-size: 30px;
+      opacity: 0.7;
+      border-radius: 50px 50px 50px 10px;
+      box-shadow:-8px -8px 80px -8px #873940 inset;
+      transform: rotate(315deg);
+      /*transition: all .2s;*/
+      position: absolute;
+      animation: move 1s infinite;
+    }
+    /* 气球旋转缩小 */
+    .box.rotate {
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      font-size: 30px;
+      opacity: 0.7;
+      border-radius: 50px 50px 50px 10px;
+      box-shadow:-8px -8px 80px -8px #873940 inset;
+      transform: rotate(315deg);
+      /*transition: all .2s;*/
+      position: absolute;
+      animation: rota 1s 1;
+    }
+    /* 字母 */
+    p {
+      transform: rotate(-315deg);
+      position: absolute;
+      left: 50%;
+      top: -50%;
+      opacity: 1!important;
+      color: gold;
+    }
+    /* 三角 */
+    .box::after {
+      position: absolute;
+      bottom: -5px;
+      left: -5px;
+      content: "";
+      border: 9px solid transparent;
+      border-bottom-color: gold;
+      transform: rotate(45deg);
+    }
+    /* 气球绳子 */
+    .box::before {
+      position: absolute;
+      content: "";
+      display: block;
+      left: -20px;
+      top: 89px;
+      width: 4px;
+      height: 60px;
+      transform: rotate(45deg);
+      background-color: blueviolet;
+    }
+    @keyframes move {
+      10% {
+        margin-left: 12px;
+    }
+      30% {
+        margin-left: 22px;
+    }
+      50% {
+        margin-left: 12px;
+    }
+      70% {
+        margin-left: 2px;
+    }
+      90% {
+        margin-left: -12px;
+    }
+    }
+
+    @keyframes rota {
+      50%{
+        transform: rotate(720deg) scale(0.1);
+      }
+    }
+  </style>
+
+  <script src="jquery-1.12.4.js"></script>
+  <script>
+    $(function () {
+      //调用气球函数
+      setInterval(balloon,3000);
+
+       
+      function balloon() {
+        //26个字母存进数组
+        var abc = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+          //创建一个div
+          var $div = $('<div class="box"></div>');
+          //生成随机颜色
+          var bgc = Math.floor(Math.random()*255);
+          var bgc1 = Math.floor(Math.random()*255);
+          var bgc2 = Math.floor(Math.random()*255);
+          //生成随机数字用来取出字母数组的下标
+          var num = Math.floor(Math.random()*26);
+          //生成随机位置
+          $div.css(
+              {
+                left:Math.floor(Math.random()*1300) + "px",
+                top:Math.floor(Math.random()*200 + 700) + "px",
+                backgroundColor: 'rgb('+bgc+','+bgc1+','+bgc2
+              }
+              //把字母添加进div里面
+          ).html('<p>'+abc[num]+'</p>');
+          //给div添加一个class类名
+          $div.addClass('animation');
+          //添加到body里面
+          $('body').append($div);
+          //获取到气球里面的字母
+          var $num = $('p').html();
+          console.log($num);
+              window.onkeyup = function (e) {
+              e = e || event;
+              //获取到点击键盘的按键
+              var keyCode = event.keyCode;
+              //把ascll码 转换成对应的字母
+              var code = String.fromCharCode(keyCode);
+              //console.log(code);
+              //判断如果按键和气球里面的字母相同  就添加一个旋转缩小的class类命   之后再移除这个div
+              if ($num == code) {
+                $div.removeClass('animation').addClass('rotate');
+                setTimeout(function(){
+                  $div.remove();
+                },500)
+              }
+            }
+      
+       //div向上飘起
+        $('div').animate({
+          top: -140
+        }, 4000,function () {
+          //如果div超出了屏幕 就移除div
+            $(this).remove();
+        })
+      
+      }
+    });
+  </script>
+
+</head>
+<body>
+
+</body>
+</html>
